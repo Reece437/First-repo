@@ -19,8 +19,9 @@ class Calculator {
 			}
 		} else if (this.opers.includes(num) && this.opers.includes(this.current.innerText.slice(-1))) {
 			return;
-		}
-		else {
+		} else {
+			console.log(num);
+			console.log(this.opers.includes(num));
 			this.current.innerText += num;
 			this.compute();
 		}
