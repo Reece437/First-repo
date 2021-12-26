@@ -1,0 +1,124 @@
+*, *::before, *::after {
+	box-sizing:border-box;
+}
+body {
+background-image:linear-gradient(to bottom right, green, blue);
+padding:0;
+margin:0;
+zoom:71.5%;
+font-family:sans serif;
+}
+.gridContainer {
+display:grid;
+justify-content:center;
+align-content:center;
+min-height:140vh;
+grid-template-columns: repeat(8, 55px);
+grid-template-rows:minmax(120px,auto) repeat(10, 55px);
+}
+.Screen {
+display: flex;
+flex-direction:column;
+align-items:flex-end;
+justify-content:space-around;
+background-color:rgba(0,0,0,0.75);
+grid-column: 1/-1;
+padding:10px;
+word-wrap:break-word;
+word-break:break-all;
+border-top-left-radius:10px;
+border-top-right-radius:10px;
+}
+#currentEq {
+color:white;
+font-size:2.0rem;
+}
+#answer {
+color:rgba(255,255,255,0.8);
+font-size:1.0rem;
+}
+.grid-item {
+font-size:40px;
+padding:20px;
+border: 1px solid rgba(0,0,0,0.8);
+background-color:rgba(255,255,255,0.75);
+text-align:center;
+cursor:pointer;
+transition-duration:0.2s;
+grid-column:span 2;
+grid-row:span 2;
+}
+.grid-item:hover {
+background-color:white;
+color:black;
+}
+.grid-item2 {
+font-size:40px;
+padding:20px;
+border: 1px solid rgba(0,0,0,0.8);
+background-color:rgba(255,255,255,0.75);
+text-align:center;
+grid-column:span 4;
+grid-row:span 2;
+cursor:pointer;
+transition-duration:0.2s;
+}
+.grid-item2:hover {
+background-color:white;
+color:black;
+}
+#grid-equals {
+font-size:40px;
+padding:20px;
+border:1px solid rgba(0,0,0,0.8);
+background-color:rgba(255,255,255,0.75);
+cursor:pointer;
+text-align:center;
+grid-column:span 4;
+grid-row:span 2;
+transition-duration:0.2s;
+border-bottom-right-radius:10px;
+}
+#grid-equals:hover {
+background-color:white;
+color:black;
+}
+#grid-point {
+font-size:40px;
+padding:20px;
+border:1px solid rgba(0,0,0,0.8);
+background-color:rgba(255,255,255,0.75);
+cursor:pointer;
+text-align:center;
+transition-duration:0.2s;
+border-bottom-left-radius:10px;
+grid-column:span 2;
+grid-row:span 2;
+}
+#grid-point:hover {
+background-color:white;
+color:black;
+}
+.grid-small {
+font-size:13px;
+padding:10px;
+text-align:center;
+border:1px solid rgba(0,0,0,0.8);
+cursor:pointer;
+visibility:hidden;
+background-color:rgba(255,255,255,0.75);
+transition-duration:0.2s;
+}
+.grid-small:hover {
+background-color:white;
+color:black;
+}
+#exp {
+visibility:hidden;
+border-bottom-left-radius:10px;
+}
+#span-2 {
+grid-column:span 2;
+border-bottom-right-radius:10px;
+}
+
