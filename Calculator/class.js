@@ -22,7 +22,7 @@ class Calculator {
 		} else {
 			console.log(num);
 			console.log(this.opers.includes(num));
-			this.current.innerText += num;
+			//this.current.innerText += num;
 			this.compute();
 		}
 	} inverse() {
@@ -168,7 +168,7 @@ document.querySelectorAll('[data-number]').forEach(button => {
 })
 document.querySelectorAll('[data-oper]').forEach(button => {
 	button.addEventListener('click', () => calc.appNum(button.innerText));
-})
+});
 document.querySelector('[data-AC]').addEventListener('click', () => calc.AC());
 document.querySelector('[data-DEL]').addEventListener('click', () => calc.DEL());
 document.querySelector('[data-equals]').addEventListener('click', () => calc.equals())
