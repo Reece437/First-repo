@@ -1,4 +1,3 @@
-console.log('Hello World!')
 import Mathfuncs from './maths.js'
 class Calculator {
 	constructor(current, answer, errorNames, opers, map) {
@@ -18,7 +17,10 @@ class Calculator {
 			if (this.current.innerText == '' || this.opers.includes(this.current.innerText.slice(-1))) {
 				this.current.innerText += '0.'
 			}
-		} else {
+		} else if (this.opers.includes(num) && this.opers.includes(this.current.innerText.slice(-1))) {
+			return;
+		}
+		else {
 			this.current.innerText += num;
 			this.compute();
 		}
@@ -89,7 +91,7 @@ class Calculator {
 		}
 	} reverseString(string) {
 		let newString = '';
-		for (let i = string.length - 1; i >= 0; i--) newString += string[i]
+		for (let i = string.length - 1; i >= 0; i--) newString += string[i];
 		return newString;
 	} equals() {
 		if (this.answer.innerText == '') {
@@ -117,14 +119,14 @@ class Calculator {
 						if (isNaN(parseFloat(eq.charAt(i - x))) && eq.charAt(i - x) != ('.' || '-')) break;
 						fact += eq.charAt(i - x);
 					}
-					fact = this.reverseString(fact)
+					fact = this.reverseString(fact);
 					eq = eq.replace(`${fact}!`, Mathfuncs.factorial(fact));
 					break;
 				}
 			}
 		}
-		eq = eq.replaceAll('MOD', '%')
-		return eq
+		eq = eq.replaceAll('MOD', '%');
+		return eq;
 	} compute() {
 		if (this.current.innerText == '') return;
 		try {
