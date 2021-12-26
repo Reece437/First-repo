@@ -1,3 +1,4 @@
+console.log('Hello World!')
 import Mathfuncs from './maths.js'
 class Calculator {
 	constructor(current, answer, errorNames, opers, map) {
