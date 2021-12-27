@@ -78,7 +78,6 @@ class Calculator {
 			}
 		}
 	} com(num) {
-		num = num.replaceAll(',', '');
 		if (isNaN(num) || 
 		num == '' || 
 		(num.includes('e+') || 
@@ -92,6 +91,31 @@ class Calculator {
 		} else {
 			return parseFloat(num).toLocaleString('en');
 		}
+	} comNums(string) {
+		string = string.replaceAll(',', '');
+		let num = ''; 
+		let len = string.length;
+		console.log(len);
+		for (let i = 0; i < len; i++) {
+			if (Number.isInteger(parseFloat(string.charAt(i)))) {
+				num += string.charAt(i);
+				console.log('first num ' + num);
+				for (let x = 1; x < len; x++) {
+					if (Number.isInteger(parseFloat(string.charAt(i + x))) ||
+					string.charAt(i + x) == '.') {
+						num += string.charAt(i + x).toString();
+						console.log('next nums ' + num);
+					} else {
+						break;
+					}
+				}
+				console.log('This is num ' + num);
+				string = string.replace(num, this.com(num));
+				i +=  num.length + Math.floor((num.length) / 3);
+				num = '';
+			}
+		}
+		return string;
 	}
 	AC() {this.current.innerText = '', this.answer.innerText = ''}
 	DEL() {
@@ -164,7 +188,7 @@ class Calculator {
 			equation.split(')').length - 1) {
 				equation += ')';
 			}
-			this.answer.innerText = Function("return " + equation)();
+			this.answer.innerText = eval(equation);
 			if (this.answer.innerText.includes('.') &&
 			this.answer.innerText.split('.')[1].length - 1 > 10 &&
 			!(this.answer.innerText.includes('e+') ||
@@ -175,7 +199,7 @@ class Calculator {
 					this.answer.innerText = this.answer.innerText.slice(0, -1);
 				}
 			}
-			this.current.innerText = this.com(this.current.innerText);
+			this.current.innerText = this.comNums(this.current.innerText);
 		} catch (err) {
 			console.log(err.message);
 			if (!this.opers.includes(this.current.innerText.slice(-1))) this.answer.innerText = '';

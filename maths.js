@@ -1,4 +1,4 @@
-export default class MathFuncs {
+export default class Mathfuncs {
 	static sqrt(x) {return x ** 0.5}
 	static log(x) {return Math.log10(x)}
 	static ln(x) {return Math.log(x)}
