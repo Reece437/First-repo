@@ -71,7 +71,18 @@ class Calculator {
 					break;
 			}
 		}
-	} AC() {this.current.innerText = '', this.answer.innerText = ''}
+	} com(num) {
+		num = num.replaceAll(',', '');
+		if (isNaN(num) || num == '' || (num.includes('e+') || num.includes('e-'))) return num;
+		if (num.includes('.')) {
+			let integer = parseFloat(num.split('.')[0]).toLocaleString('en');
+			let decimal = num.split('.')[0];
+			return integer + '.' + decimal;
+		} else {
+			return parseFloat(num).toLocaleString('en');
+		}
+	}
+	AC() {this.current.innerText = '', this.answer.innerText = ''}
 	DEL() {
 		if (this.errorNames.includes(this.current.innerText)) this.AC();
 		else {
@@ -141,10 +152,11 @@ class Calculator {
 			while (equation.split('(').length - 1 > equation.split(')').length - 1) {
 				equation += ')';
 			}
-			this.answer.innerText = new Function("return " + equation)();
+			this.answer.innerText = Function("return " + equation)();
+			this.current.innerText = this.com(this.current.innerText);
 		} catch (err) {
 			console.log(err.message);
-			this.answer.innerText = '';
+			if (!this.opers.includes(this.current.innerText.slice(-1))) this.answer.innerText = '';
 		}
 	}
 }
@@ -166,7 +178,8 @@ const map = {
 	'tan-1': 'Mathfuncs.tanInv',
 	'log': 'Mathfuncs.log',
 	'ln': 'Mathfuncs.ln',
-	'π': 'Math.PI'
+	'π': 'Math.PI',
+	',': ''
 };
 const calc = new Calculator(current, answer, errorNames, opers, map);
 document.querySelectorAll('[data-number]').forEach(button => {
