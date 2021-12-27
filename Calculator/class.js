@@ -95,6 +95,7 @@ class Calculator {
 		for (let i = string.length - 1; i >= 0; i--) newString += string[i];
 		return newString;
 	} equals() {
+		if (this.current.innerText == '') return;
 		if (this.answer.innerText == '') {
 				this.current.innerText = 'Syntax Error';
 				return;
