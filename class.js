@@ -14,10 +14,17 @@ class Calculator {
 	} appNum(num) {
 		if (this.errorNames.includes(this.current.innerText)) return;
 		if (num == '.') {
-			if (this.current.innerText == '' || this.opers.includes(this.current.innerText.slice(-1))) {
+			if (current.innerText.slice(-1) == '.') return;
+			else if (this.current.innerText == '' || this.opers.includes(this.current.innerText.slice(-1))) {
 				this.current.innerText += '0.';
+			} else {
+				for (let i = this.current.innerText.length - 1; i >= 0; i--) {
+					if (this.opers.includes(this.current.innerText.charAt(i))) break;
+					else if (this.current.innerText.charAt(i) == '.') return;
+				}
 			}
-		} else if (this.opers.includes(this.current.innerText.slice(-1)) && this.opers.includes(num)) return;
+		}
+		if (this.opers.includes(this.current.innerText.slice(-1)) && this.opers.includes(num)) return;
 		else if ((this.opers.includes(num) || num == '-') && this.current.innerText.slice(-2) == '--') return;
 		else {
 			this.current.innerText += num;
@@ -93,6 +100,7 @@ class Calculator {
 		for (let i = string.length - 1; i >= 0; i--) newString += string[i];
 		return newString;
 	} equals() {
+		if (this.current.innerText == '') return;
 		if (this.answer.innerText == '') {
 				this.current.innerText = 'Syntax Error';
 				return;
@@ -133,7 +141,7 @@ class Calculator {
 			while (equation.split('(').length - 1 > equation.split(')').length - 1) {
 				equation += ')';
 			}
-			this.answer.innerText = eval(equation).toString().replace('Infinity', 'undefined');
+			this.answer.innerText = new Function("return " + equation)();
 		} catch (err) {
 			console.log(err.message);
 			this.answer.innerText = '';
@@ -142,7 +150,7 @@ class Calculator {
 }
 const current = document.getElementById('currentEq');
 const answer = document.getElementById('answer');
-const errorNames = ['Syntax Error', 'NaN', 'undefined'];
+const errorNames = ['Syntax Error', 'NaN', 'undefined', 'Math Error'];
 const opers = ['+', '^', '×', '÷', '--', '//', '%'];
 const map = {
 	'^': '**',
@@ -162,15 +170,15 @@ const map = {
 };
 const calc = new Calculator(current, answer, errorNames, opers, map);
 document.querySelectorAll('[data-number]').forEach(button => {
-	button.addEventListener('click', () => calc.appNum(button.innerText))
-})
+	button.addEventListener('click', () => calc.appNum(button.innerText));
+});
 document.querySelectorAll('[data-oper]').forEach(button => {
 	button.addEventListener('click', () => calc.appNum(button.innerText));
-})
+});
 document.querySelector('[data-AC]').addEventListener('click', () => calc.AC());
 document.querySelector('[data-DEL]').addEventListener('click', () => calc.DEL());
-document.querySelector('[data-equals]').addEventListener('click', () => calc.equals())
-document.querySelector('[data-equals]').addEventListener('dblclick', () => calc.showAdv())
+document.querySelector('[data-equals]').addEventListener('click', () => calc.equals());
+document.querySelector('[data-equals]').addEventListener('dblclick', () => calc.showAdv());
 document.querySelectorAll('[data-bOper]').forEach(button => {
 	button.addEventListener('click', () => {
 		switch (button.innerText) {
@@ -189,6 +197,6 @@ document.querySelectorAll('[data-bOper]').forEach(button => {
 				calc.appNum(button.innerText);
 				break;
 		}
-	})
-})
+	});
+});
 document.querySelector('[data-inv]').addEventListener('click', () => calc.inverse());
