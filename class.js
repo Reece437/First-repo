@@ -15,8 +15,10 @@ class Calculator {
 		if (this.errorNames.includes(this.current.innerText)) return;
 		if (num == '.') {
 			if (current.innerText.slice(-1) == '.') return;
-			else if (this.current.innerText == '' || this.opers.includes(this.current.innerText.slice(-1))) {
+			else if (this.current.innerText == '' || 
+			this.opers.includes(this.current.innerText.slice(-1))) {
 				this.current.innerText += '0.';
+				return;
 			} else {
 				for (let i = this.current.innerText.length - 1; i >= 0; i--) {
 					if (this.opers.includes(this.current.innerText.charAt(i))) break;
@@ -24,9 +26,13 @@ class Calculator {
 				}
 			}
 		}
-		if (this.opers.includes(this.current.innerText.slice(-1)) && this.opers.includes(num)) return;
-		else if ((this.opers.includes(num) || num == '-') && this.current.innerText.slice(-2) == '--') return;
-		else {
+		if (this.opers.includes(this.current.innerText.slice(-1)) && 
+		this.opers.includes(num)) {
+			return;
+		} else if ((this.opers.includes(num) || num == '-') && 
+		this.current.innerText.slice(-2) == '--') {
+			return;
+		} else {
 			this.current.innerText += num;
 			this.compute();
 		}
@@ -73,10 +79,15 @@ class Calculator {
 		}
 	} com(num) {
 		num = num.replaceAll(',', '');
-		if (isNaN(num) || num == '' || (num.includes('e+') || num.includes('e-'))) return num;
+		if (isNaN(num) || 
+		num == '' || 
+		(num.includes('e+') || 
+		num.includes('e-'))) { 
+			return num;
+		}
 		if (num.includes('.')) {
 			let integer = parseFloat(num.split('.')[0]).toLocaleString('en');
-			let decimal = num.split('.')[0];
+			let decimal = num.split('.')[1];
 			return integer + '.' + decimal;
 		} else {
 			return parseFloat(num).toLocaleString('en');
@@ -149,10 +160,21 @@ class Calculator {
 		if (this.current.innerText == '') return;
 		try {
 			let equation = this.change(this.current.innerText);
-			while (equation.split('(').length - 1 > equation.split(')').length - 1) {
+			while (equation.split('(').length - 1 > 
+			equation.split(')').length - 1) {
 				equation += ')';
 			}
 			this.answer.innerText = Function("return " + equation)();
+			if (this.answer.innerText.includes('.') &&
+			this.answer.innerText.split('.')[1].length - 1 > 10 &&
+			!(this.answer.innerText.includes('e+') ||
+			this.answer.innerText.includes('e-'))) {
+				let secondHalf = this.answer.innerText.split('.')[1];
+				this.answer.innerText = parseFloat(this.answer.innerText).toFixed(secondHalf.length - 2);
+				while (this.answer.innerText.slice(-1) == '0') {
+					this.answer.innerText = this.answer.innerText.slice(0, -1);
+				}
+			}
 			this.current.innerText = this.com(this.current.innerText);
 		} catch (err) {
 			console.log(err.message);
