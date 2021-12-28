@@ -14,8 +14,7 @@ class Calculator {
 	} appNum(num) {
 		if (this.errorNames.includes(this.current.innerText)) return;
 		if (num == '.') {
-			if (current.innerText.slice(-1) == '.') return;
-			else if (this.current.innerText == '' || 
+			if (this.current.innerText == '' || 
 			this.opers.includes(this.current.innerText.slice(-1))) {
 				this.current.innerText += '0.';
 				return;
@@ -95,21 +94,17 @@ class Calculator {
 		string = string.replaceAll(',', '');
 		let num = ''; 
 		let len = string.length;
-		console.log(len);
 		for (let i = 0; i < len; i++) {
-			if (Number.isInteger(parseFloat(string.charAt(i)))) {
-				num += string.charAt(i);
-				console.log('first num ' + num);
+			if (Number.isInteger(parseFloat(string[i]))) {
+				num += string[i];
 				for (let x = 1; x < len; x++) {
 					if (Number.isInteger(parseFloat(string.charAt(i + x))) ||
-					string.charAt(i + x) == '.') {
-						num += string.charAt(i + x).toString();
-						console.log('next nums ' + num);
+					string[i + x] == '.') {
+						num += string[i + x];
 					} else {
 						break;
 					}
 				}
-				console.log('This is num ' + num);
 				string = string.replace(num, this.com(num));
 				i +=  num.length + Math.floor((num.length) / 3);
 				num = '';
@@ -155,25 +150,34 @@ class Calculator {
 		this.answer.innerText = '';
 	} change(eq) {
 		eq = this.bigReplace(eq);
+		var nums;
 		while (eq.includes('!') || eq.includes('%')) {
 			let len = eq.length;
 			for (let i = 0; i < len; i++) {
-				if (eq.charAt(i) == "%") {
-					let fact = '';
+				if (eq[i] == "%") {
+					nums = '';
 					for (let x = 1; x <= i; x++) {
-						if (isNaN(parseFloat(eq.charAt(i - x))) && eq.charAt(i - x) != ('.' || '-')) break;
-						fact += eq.charAt(i - x);
+						if (isNaN(parseFloat(eq.charAt(i - x))) &&
+						eq[i - x] != ('.' || '-'))
+						{
+							break;
+						}
+						nums += eq[i - x];
 					}
-					fact = this.reverseString(fact);
-					eq = eq.replace(fact + '%', Mathfuncs.perc(fact));
-				} else if (eq.charAt(i) == '!') {
-					let fact = '';
+					nums = this.reverseString(nums);
+					eq = eq.replace(nums + '%', Mathfuncs.perc(nums));
+				} else if (eq[i] == '!') {
+					nums = '';
 					for (let x = 1; x <= i; x++) {
-						if (isNaN(parseFloat(eq.charAt(i - x))) && eq.charAt(i - x) != ('.' || '-')) break;
-						fact += eq.charAt(i - x);
+						if (isNaN(parseFloat(eq[i - x])) && 
+						eq[i - x] != ('.' || '-')) 
+						{
+							break;
+						}
+						nums += eq[i - x];
 					}
-					fact = this.reverseString(fact);
-					eq = eq.replace(`${fact}!`, Mathfuncs.factorial(fact));
+					nums = this.reverseString(nums);
+					eq = eq.replace(`${nums}!`, Mathfuncs.factorial(nums));
 					break;
 				}
 			}
@@ -185,21 +189,27 @@ class Calculator {
 		try {
 			let equation = this.change(this.current.innerText);
 			while (equation.split('(').length - 1 > 
-			equation.split(')').length - 1) {
+			equation.split(')').length - 1) 
+			{
 				equation += ')';
 			}
 			this.answer.innerText = eval(equation);
 			if (this.answer.innerText.includes('.') &&
 			this.answer.innerText.split('.')[1].length - 1 > 10 &&
 			!(this.answer.innerText.includes('e+') ||
-			this.answer.innerText.includes('e-'))) {
+			this.answer.innerText.includes('e-'))) 
+			{
 				let secondHalf = this.answer.innerText.split('.')[1];
-				this.answer.innerText = parseFloat(this.answer.innerText).toFixed(secondHalf.length - 2);
-				while (this.answer.innerText.slice(-1) == '0') {
+				this.answer.innerText = parseFloat(this.answer.innerText)
+				.toFixed(secondHalf.length - 2);
+				while (this.answer.innerText.slice(-1) == '0' || 
+				this.answer.innerText.slice(-1) == '.') 
+				{
 					this.answer.innerText = this.answer.innerText.slice(0, -1);
 				}
 			}
 			this.current.innerText = this.comNums(this.current.innerText);
+			this.answer.innerText = this.com(this.answer.innerText);
 		} catch (err) {
 			console.log(err.message);
 			if (!this.opers.includes(this.current.innerText.slice(-1))) this.answer.innerText = '';
@@ -215,21 +225,31 @@ const map = {
 	'×': '*', 
 	'÷': '/', 
 	'--': '+',
-	'√': 'Mathfuncs.sqrt',
+	'√': 'Math.sqrt',
 	'sin(': 'Mathfuncs.sin(',
 	'cos(': 'Mathfuncs.cos(',
 	'tan(': 'Mathfuncs.tan(',
 	'sin-1': 'Mathfuncs.sinInv',
 	'cos-1': 'Mathfuncs.cosInv',
 	'tan-1': 'Mathfuncs.tanInv',
-	'log': 'Mathfuncs.log',
-	'ln': 'Mathfuncs.ln',
+	'log': 'Math.log10',
+	'ln': 'Math.log',
 	'π': 'Math.PI',
+	'e': 'Math.E',
 	',': ''
 };
 const calc = new Calculator(current, answer, errorNames, opers, map);
 document.querySelectorAll('[data-number]').forEach(button => {
-	button.addEventListener('click', () => calc.appNum(button.innerText));
+	button.addEventListener('click', () => {
+		if (current.innerText == '0' &&
+		button.innerText != '.') 
+		{
+			current.innerText = button.innerText;
+			calc.compute();
+		} else {
+			calc.appNum(button.innerText);
+		}
+	});
 });
 document.querySelectorAll('[data-oper]').forEach(button => {
 	button.addEventListener('click', () => calc.appNum(button.innerText));

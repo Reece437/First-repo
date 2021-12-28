@@ -1,7 +1,4 @@
 export default class Mathfuncs {
-	static sqrt(x) {return x ** 0.5}
-	static log(x) {return Math.log10(x)}
-	static ln(x) {return Math.log(x)}
 	static sin(x) {return Math.sin((x * Math.PI) / 180)}
 	static cos(x) {
 		if (x == 90) return 0;
@@ -23,7 +20,7 @@ export default class Mathfuncs {
 			for (let i = x - 1; i > 1; i--) {
 				x *= i;
 			}
-		return x * -1;
+		return - (x);
 		}
 		for (let i = x - 1; i > 1; i--) {
 			x *= i;
