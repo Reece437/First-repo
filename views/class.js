@@ -106,7 +106,7 @@ class Calculator {
 					}
 				}
 				string = string.replace(num, this.com(num));
-				i +=  num.length + Math.floor((num.length) / 3);
+				i +=  num.length + Math.floor((num.length) / 4);
 				num = '';
 			}
 		}
